@@ -1,0 +1,33 @@
+# EditorConfig keeps indentation and line endings the same in every editor.
+# See https://editorconfig.org
+root = true
+
+# Default settings. WordPress coding standards use tabs for indentation.
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = tab
+indent_size = 4
+
+# YAML does not allow tabs for indentation.
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# TypeScript, React and the ESLint config use two spaces for indentation and lines of at most
+# 120 characters.
+[*.{ts,tsx,mts,cjs}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# Lock files are written by npm and Composer, so editors must not reformat them.
+[{package-lock.json,composer.lock}]
+indent_style = space
+indent_size = 2
+
+# In Markdown, two trailing spaces can mean a line break, so they must be kept.
+[*.md]
+trim_trailing_whitespace = false

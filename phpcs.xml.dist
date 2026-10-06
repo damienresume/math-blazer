@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<ruleset name="Math Blazer"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd">
+
+	<description>PHP code style rules for the Math Blazer plugin.</description>
+
+	<!-- Check every PHP file in the plugin, except generated and third party code. -->
+	<file>.</file>
+	<exclude-pattern>*/build/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+
+	<!-- Command line behavior: only PHP files, colored output, show the rule name and progress. -->
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="ps"/>
+	<arg name="parallel" value="8"/>
+
+	<!-- Report code that does not run on the PHP versions the plugin supports (8.2 and newer). -->
+	<config name="testVersion" value="8.2-"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<!-- Report use of WordPress functions that do not exist in the minimum supported WordPress version. -->
+	<config name="minimum_wp_version" value="6.9"/>
+
+	<!-- The WordPress coding standards: core style rules, documentation rules and extra checks. -->
+	<rule ref="WordPress"/>
+
+	<!-- Every visible string must use this text domain, so translation tools can find it. -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="math-blazer"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- The render templates run inside a WordPress function, so the variables they create
+	     are local and cannot clash with other plugins. The prefix rule for variables is
+	     therefore turned off for these files. Functions and constants keep the rule. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound">
+		<exclude-pattern>*/render.php</exclude-pattern>
+	</rule>
+
+	<!-- Names that this plugin defines must start with one of these prefixes. This avoids
+	     clashes with other plugins that run on the same site. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="MathBlazer\SampleCourse"/>
+				<element value="math_blazer"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

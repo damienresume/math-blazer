@@ -1,0 +1,6 @@
+# Use Unix line endings (LF) in every text file, on every operating system.
+#
+# The Docker containers run Linux. A shell script with Windows line endings (CRLF)
+# fails there with an error such as "/bin/sh^M: bad interpreter". Without this file,
+# Git for Windows can convert the files of this repository to CRLF when it clones them.
+* text=auto eol=lf

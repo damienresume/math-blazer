@@ -1,0 +1,50 @@
+{
+	// TypeScript only checks types in this project. `@wordpress/scripts` compiles the code with
+	// Babel, which removes types without checking them. Run `npm run typecheck` to find type errors.
+	"compilerOptions": {
+		// Language and library level. Current browsers support ES2022, and the build tool
+		// lowers the output further when the browserslist settings need it.
+		"target": "ES2022",
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
+
+		// Module settings match how webpack resolves imports.
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+
+		// Use the modern JSX transform, so files do not need to import React.
+		// WordPress provides the JSX runtime through `@wordpress/element`.
+		"jsx": "react-jsx",
+
+		// Strict checks. These catch missing values, wrong argument types and unused code.
+		"strict": true,
+		// Reading an array item or a record key can return undefined, so the type includes it.
+		"noUncheckedIndexedAccess": true,
+		// A method that replaces a parent method must be marked with `override`.
+		"noImplicitOverride": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		// Side effect imports such as `import './style.scss'` must resolve to a real file or a
+		// declared module. `src/global.d.ts` declares the SCSS files.
+		"noUncheckedSideEffectImports": true,
+
+		// Babel compiles each file on its own, so every file must be safe to compile alone.
+		"isolatedModules": true,
+		// Imports that only carry types must use `import type`, so Babel can remove them safely.
+		"verbatimModuleSyntax": true,
+
+		// Skip type checks of declaration files inside node_modules. The `@types` packages for
+		// WordPress depend on older versions of the WordPress packages, and checking them
+		// would report errors in code that this project does not own.
+		"skipLibCheck": true,
+
+		// Type checking only. The build tool creates the output files.
+		"noEmit": true,
+
+		// Do not load any global type packages automatically. Test files import `describe`, `it`
+		// and `expect` from 'vitest', and every other type loads through imports.
+		"types": []
+	},
+	"include": ["src", "vitest.config.mts"]
+}
