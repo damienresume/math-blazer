@@ -1,0 +1,10 @@
+{
+	"$comment": "The single list of lesson types, shared by the block editor (TypeScript) and the public page (PHP). Each entry has a key that is saved in the post content, an English label, and the name of an icon from icons.json. The label is the English source text. TypeScript and PHP translate it, and a unit test checks that this file and src/lesson-types.ts stay in step. To add a type: add it here, add its icon to icons.json if it needs a new one, add the key and the label to src/lesson-types.ts, and add its style. The unit test fails until all of these match.",
+	"types": [
+		{ "key": "video", "label": "Video", "icon": "video" },
+		{ "key": "math-game", "label": "Math game", "icon": "math" },
+		{ "key": "quiz", "label": "Quiz", "icon": "help" },
+		{ "key": "boss-challenge", "label": "Boss challenge", "icon": "shield" },
+		{ "key": "worksheet", "label": "Worksheet", "icon": "page" }
+	]
+}

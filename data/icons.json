@@ -1,0 +1,52 @@
+{
+	"$comment": "Icon shapes shared by the block editor (TypeScript) and the public page (PHP). The svg object holds the drawing settings that every icon uses. Each icon is a list of SVG path strings on that grid. Keeping the shapes in one file means an icon cannot look different in the editor and on the public page. The shapes are copied from the @wordpress/icons package, which is licensed GPL-2.0-or-later like this plugin. Icons with filled set to true are painted solid. All other icons are drawn as outlines.",
+	"svg": {
+		"viewBox": "0 0 24 24",
+		"strokeWidth": "1.5",
+		"strokeLinejoin": "round"
+	},
+	"icons": {
+		"video": {
+			"filled": false,
+			"paths": [
+				"M10 15L15 12L10 9V15Z",
+				"M4.75 6C4.75 5.30964 5.30964 4.75 6 4.75H18C18.6904 4.75 19.25 5.30964 19.25 6V18C19.25 18.6904 18.6904 19.25 18 19.25H6C5.30964 19.25 4.75 18.6904 4.75 18V6Z"
+			]
+		},
+		"math": {
+			"filled": false,
+			"paths": [
+				"M3 14H5L6.8916 16.3645C6.93974 16.4247 7.03496 16.4101 7.06289 16.3383L10.2521 8.13755C10.4015 7.75318 10.7717 7.5 11.1841 7.5H19M17 11L14.5 13.5M12 16L14.5 13.5M14.5 13.5L17 16M14.5 13.5L12 11"
+			]
+		},
+		"help": {
+			"filled": false,
+			"paths": [
+				"M9.75 10.25C9.75 9.00736 10.7574 8 12 8C13.2426 8 14.25 9.00736 14.25 10.25C14.25 11.4083 13.3748 12.3621 12.2496 12.4863C12.1124 12.5015 12 12.6119 12 12.75V14M12 15V16.5",
+				"M19.25 12C19.25 16.0041 16.0041 19.25 12 19.25C7.99594 19.25 4.75 16.0041 4.75 12C4.75 7.99594 7.99594 4.75 12 4.75C16.0041 4.75 19.25 7.99594 19.25 12Z"
+			]
+		},
+		"shield": {
+			"filled": false,
+			"paths": [
+				"M18 6.75V10.5C18 14.4187 15.4956 17.7524 12 18.9879C8.50442 17.7524 6 14.4187 6 10.5V6.75L12 4L18 6.75Z"
+			]
+		},
+		"page": {
+			"filled": false,
+			"paths": [
+				"M8.5 8.25H15.5M8.5 11.75H15.5M8.5 15.25H15.5M18.25 18V6C18.25 5.30964 17.6904 4.75 17 4.75H7C6.30964 4.75 5.75 5.30964 5.75 6L5.75 18C5.75 18.6904 6.30964 19.25 7 19.25H17C17.6904 19.25 18.25 18.6904 18.25 18Z"
+			]
+		},
+		"chevron-down": {
+			"filled": false,
+			"paths": [ "M7 11L12 15L17 11" ]
+		},
+		"star": {
+			"filled": true,
+			"paths": [
+				"M12 5.71576L13.6106 8.97924C13.7563 9.27438 14.0379 9.47895 14.3636 9.52628L17.965 10.0496L15.359 12.5899C15.1233 12.8196 15.0157 13.1506 15.0714 13.475L15.6866 17.0619L12.4653 15.3684C12.174 15.2152 11.826 15.2152 11.5347 15.3684L8.31341 17.0619L8.92861 13.475C8.98425 13.1506 8.8767 12.8196 8.64102 12.5899L6.03497 10.0496L9.63644 9.52628C9.96215 9.47895 10.2437 9.27438 10.3894 8.97924L12 5.71576Z"
+			]
+		}
+	}
+}
