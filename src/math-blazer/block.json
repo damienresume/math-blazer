@@ -1,0 +1,114 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "math-blazer/math-blazer",
+	"version": "0.1.0",
+	"title": "Course Curriculum",
+	"category": "widgets",
+	"icon": "list-view",
+	"description": "An accordion that shows what a course contains: levels, lessons, time, XP rewards and badges. Built for the course page of a math learning site.",
+	"keywords": [ "course", "curriculum", "accordion", "lms", "syllabus" ],
+	"textdomain": "math-blazer",
+	"allowedBlocks": [ "math-blazer/curriculum-level" ],
+	"attributes": {
+		"align": {
+			"type": "string",
+			"default": "wide"
+		},
+		"headingLevel": {
+			"type": "number",
+			"default": 3,
+			"enum": [ 2, 3, 4 ]
+		},
+		"allowMultipleOpen": {
+			"type": "boolean",
+			"default": false
+		},
+		"showSummary": {
+			"type": "boolean",
+			"default": true
+		},
+		"showExpandAll": {
+			"type": "boolean",
+			"default": true
+		},
+		"showXp": {
+			"type": "boolean",
+			"default": true
+		},
+		"showBadges": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"providesContext": {
+		"math-blazer/curriculumHeadingLevel": "headingLevel",
+		"math-blazer/curriculumShowXp": "showXp",
+		"math-blazer/curriculumShowBadges": "showBadges"
+	},
+	"supports": {
+		"html": false,
+		"interactivity": true,
+		"align": [ "wide", "full" ],
+		"color": {
+			"background": true,
+			"text": true,
+			"gradients": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true,
+			"blockGap": false
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true
+		},
+		"border": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true
+		}
+	},
+	"example": {
+		"attributes": {
+			"showSummary": true
+		},
+		"innerBlocks": [
+			{
+				"name": "math-blazer/curriculum-level",
+				"attributes": {
+					"title": "Level 1: Number Kingdom",
+					"badge": "Number Knight",
+					"openByDefault": true,
+					"lessons": [
+						{
+							"id": "example-1",
+							"title": "Place value adventure",
+							"type": "math-game",
+							"minutes": 15,
+							"xp": 50,
+							"isFreePreview": true,
+							"previewUrl": ""
+						},
+						{
+							"id": "example-2",
+							"title": "Boss: The Rounding Dragon",
+							"type": "boss-challenge",
+							"minutes": 10,
+							"xp": 100,
+							"isFreePreview": false,
+							"previewUrl": ""
+						}
+					]
+				}
+			}
+		]
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScriptModule": "file:./view.js",
+	"render": "file:./render.php"
+}

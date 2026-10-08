@@ -1,0 +1,51 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "math-blazer/curriculum-level",
+	"version": "0.1.0",
+	"title": "Curriculum Level",
+	"category": "widgets",
+	"icon": "excerpt-view",
+	"description": "One level of the course: a title, a short description, a badge reward and the lessons inside the level.",
+	"keywords": [ "level", "module", "lessons" ],
+	"textdomain": "math-blazer",
+	"parent": [ "math-blazer/math-blazer" ],
+	"usesContext": [
+		"math-blazer/curriculumHeadingLevel",
+		"math-blazer/curriculumShowXp",
+		"math-blazer/curriculumShowBadges"
+	],
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"description": {
+			"type": "string",
+			"default": ""
+		},
+		"badge": {
+			"type": "string",
+			"default": ""
+		},
+		"openByDefault": {
+			"type": "boolean",
+			"default": false
+		},
+		"lessons": {
+			"type": "array",
+			"default": [],
+			"items": {
+				"type": "object"
+			}
+		}
+	},
+	"supports": {
+		"html": false,
+		"reusable": false
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}
