@@ -1,0 +1,54 @@
+// The summary bar and the expand all button above the levels.
+
+@use "mixins" as *;
+
+// The row that holds the summary and the button. It wraps on narrow screens.
+.math-blazer__toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--math-blazer-gap);
+	margin-block-end: var(--math-blazer-gap);
+}
+
+// The totals of the course: levels, lessons, time, XP and badges.
+.math-blazer__summary {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.math-blazer__summary-item {
+
+	@include chip;
+
+	background: var(--math-blazer-summary-bg);
+	color: var(--math-blazer-summary-text);
+}
+
+// The button that opens or closes every level. The target is at least 44
+// pixels high, which is comfortable for a finger on a touch screen.
+.math-blazer__expand-all {
+	min-block-size: 2.75rem;
+	padding: 0 1rem;
+	border: 2px solid var(--math-blazer-accent);
+	border-radius: var(--math-blazer-radius);
+	background: transparent;
+	color: var(--math-blazer-accent-text);
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
+
+	&:hover {
+		background: var(--math-blazer-accent-soft);
+	}
+
+	&:focus-visible {
+
+		@include focus-ring;
+	}
+}

@@ -1,0 +1,7 @@
+// Styles of the Curriculum Level block that load on the public page and in the
+// editor.
+// The colors and sizes come from the CSS custom properties that the parent
+// block defines on its wrapper (see src/styles/_variables.scss).
+
+@use "../styles/level";
+@use "../styles/lesson";

@@ -1,0 +1,9 @@
+// Styles of the Course Curriculum block that load on the public page and in
+// the editor.
+// One stylesheet for both places is the main way to keep the editor and the
+// public page looking the same. This file covers the wrapper, the summary bar
+// and the expand all button. The levels and lessons have their own stylesheet
+// in curriculum-level.
+
+@use "../styles/variables";
+@use "../styles/summary";

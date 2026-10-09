@@ -1,0 +1,54 @@
+// The design tokens of the block, written as CSS custom properties.
+// Custom properties are used instead of Sass variables because a theme or a
+// page can change them without editing the plugin and without writing stronger
+// selectors. For example, a theme can set `--math-blazer-accent` to its
+// brand color.
+// Every text and background pair below has a contrast ratio of at least 4.5 to
+// 1, which is the WCAG AA minimum for normal text. The ratios are checked in
+// the verification step of the project.
+
+.math-blazer {
+	// Text and surfaces.
+	--math-blazer-text: #1b1740;
+	--math-blazer-muted: #4a4770;
+	--math-blazer-surface: #fff;
+	--math-blazer-surface-alt: #f3f0ff;
+	--math-blazer-border: #8a7fd0;
+
+	// The main accent. `accent` is a background for white text, `accent-text`
+	// is the same hue for text on a light background, and `accent-soft` is a
+	// light fill.
+	--math-blazer-accent: #4b2fd6;
+	--math-blazer-accent-contrast: #fff;
+	--math-blazer-accent-text: #3d24b8;
+	--math-blazer-accent-soft: #ece8ff;
+
+	// The focus ring.
+	--math-blazer-focus: #1d4ed8;
+
+	// Chips and rewards.
+	--math-blazer-chip-bg: #fff;
+	--math-blazer-chip-text: #1b1740;
+	--math-blazer-xp-bg: #fff0b8;
+	--math-blazer-xp-text: #5c3b00;
+	--math-blazer-badge-bg: #dff5e6;
+	--math-blazer-badge-text: #0f4d26;
+	--math-blazer-preview-bg: #dbeafe;
+	--math-blazer-preview-text: #123e7c;
+	--math-blazer-summary-bg: #ece8ff;
+	--math-blazer-summary-text: #2c1a8f;
+
+	// The accent of boss challenge rows.
+	--math-blazer-boss: #b3261e;
+
+	// Shape, spacing and motion.
+	--math-blazer-radius: 0.75rem;
+	--math-blazer-gap: 0.75rem;
+	--math-blazer-motion: 200ms;
+
+	// The wrapper is a size container. The lesson rows change their layout
+	// with the width of the wrapper (a container query), not with the width of
+	// the screen, so the block looks right in a narrow column on a wide screen
+	// too.
+	container-type: inline-size;
+}

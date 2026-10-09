@@ -1,0 +1,184 @@
+// One level of the course: the card, the header button and the panel that
+// opens.
+
+@use "mixins" as *;
+
+// The list of levels. The CSS counter numbers the levels, so the number does
+// not have to be saved or counted in PHP. The counter works in the editor too,
+// because the editor markup uses the same class names.
+.math-blazer__levels {
+	display: grid;
+
+	// One column that is exactly as wide as the container. Without
+	// `minmax(0, 1fr)` a wide child, such as the lesson form fields in the
+	// editor, can make the column wider than the container. The cards would
+	// then be wider than on the public page, and the chevron at the right edge
+	// of the header would sit further to the right.
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--math-blazer-gap);
+	counter-reset: math-blazer-level;
+}
+
+.math-blazer__level {
+	counter-increment: math-blazer-level;
+	border: 2px solid var(--math-blazer-border);
+	border-radius: var(--math-blazer-radius);
+	background: var(--math-blazer-surface);
+	color: var(--math-blazer-text);
+}
+
+// The heading holds the button. The theme gives headings a size and a margin,
+// which would make the header larger than designed, so both are reset here.
+.math-blazer__heading {
+	margin: 0;
+	font: inherit;
+}
+
+// The header button: a number, the title with its facts, and the chevron at the
+// right edge. The columns follow the order of the elements in the markup.
+// `box-sizing: border-box` makes the 100% width include the padding. Browsers
+// apply it to a button on their own, which is the public page. The editor
+// shows a div, which counts the padding on top of the width. The header was
+// then 2rem wider than the card, and the chevron sat on the card border.
+.math-blazer__trigger {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	align-items: center;
+	gap: 0.75rem;
+	box-sizing: border-box;
+	inline-size: 100%;
+	min-block-size: 3.5rem;
+	padding: 0.75rem 1rem;
+	border: 0;
+	border-radius: calc(var(--math-blazer-radius) - 2px);
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	text-align: start;
+	cursor: pointer;
+
+	&:hover {
+		background: var(--math-blazer-surface-alt);
+	}
+
+	// The ring is drawn inside the button, so the rounded card does not cut it
+	// off.
+	&:focus-visible {
+
+		@include focus-ring(-4px);
+	}
+}
+
+// The level number comes from the CSS counter. It is decoration, because the
+// title already says which level it is, so screen readers skip it (aria-hidden
+// in the markup).
+.math-blazer__level-number {
+	display: grid;
+	place-items: center;
+	inline-size: 2.25rem;
+	block-size: 2.25rem;
+	border-radius: 50%;
+	background: var(--math-blazer-accent);
+	color: var(--math-blazer-accent-contrast);
+	font-weight: 700;
+
+	&::before {
+		content: counter(math-blazer-level);
+	}
+}
+
+.math-blazer__trigger-text {
+	display: grid;
+	gap: 0.125rem;
+	min-inline-size: 0;
+}
+
+.math-blazer__title {
+	font-size: 1.125em;
+	font-weight: 700;
+	overflow-wrap: anywhere;
+}
+
+// The facts under the title. A thin line separates them, so no separator
+// character is read aloud by screen readers.
+.math-blazer__meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.125rem 0.75rem;
+	color: var(--math-blazer-muted);
+	font-size: 0.875em;
+}
+
+.math-blazer__meta-item + .math-blazer__meta-item {
+	padding-inline-start: 0.75rem;
+	border-inline-start: 1px solid var(--math-blazer-border);
+}
+
+.math-blazer__chevron {
+	inline-size: 1.75rem;
+	block-size: 1.75rem;
+	color: var(--math-blazer-accent-text);
+	transition: transform var(--math-blazer-motion) ease;
+
+	@include reduced-motion {
+		transition: none;
+	}
+}
+
+// The chevron points up while the level is open. The style follows the ARIA
+// state, so the look and the state that screen readers announce cannot
+// disagree.
+.math-blazer__trigger[aria-expanded="true"] .math-blazer__chevron {
+	transform: rotate(180deg);
+}
+
+// The panel fades in when it opens and fades out when it closes.
+// `allow-discrete` lets the opacity change finish before the browser switches
+// `display` to `none`, and `@starting-style` gives the fade in a starting
+// point. Browsers that do not support these features switch the panel at once,
+// which is fine.
+.math-blazer__panel {
+	padding: 1rem;
+	border-block-start: 1px solid var(--math-blazer-border);
+	opacity: 1;
+	transition:
+		opacity var(--math-blazer-motion) ease,
+		display var(--math-blazer-motion) allow-discrete;
+
+	@starting-style {
+		opacity: 0;
+	}
+
+	&[hidden] {
+		opacity: 0;
+	}
+
+	@include reduced-motion {
+		transition: none;
+	}
+}
+
+.math-blazer__description {
+	margin: 0 0 1rem;
+}
+
+// The badge reward of the level.
+.math-blazer__badge {
+	display: flex;
+	align-items: center;
+	inline-size: fit-content;
+	max-inline-size: 100%;
+	gap: 0.5rem;
+	margin: 0 0 1rem;
+	padding: 0.5rem 0.75rem;
+	border-radius: var(--math-blazer-radius);
+	background: var(--math-blazer-badge-bg);
+	color: var(--math-blazer-badge-text);
+	font-weight: 600;
+}
+
+.math-blazer__icon {
+	flex: none;
+	inline-size: 1.25rem;
+	block-size: 1.25rem;
+}

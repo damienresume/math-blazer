@@ -1,0 +1,166 @@
+// The lesson rows inside a level: the type, the title and the chips.
+
+@use "sass:map";
+@use "mixins" as *;
+
+// The colors of each lesson type. Each type has a light background and a dark
+// text color, and every pair meets the 4.5 to 1 contrast minimum. The type is
+// also written as text next to the icon, so the color is never the only way to
+// tell the types apart.
+$lesson-type-colors: (
+	"video": (
+		bg: #e6e9f7,
+		text: #262f5e,
+	),
+	"math-game": (
+		bg: #e0f0ff,
+		text: #0b4a77,
+	),
+	"quiz": (
+		bg: #f1e6ff,
+		text: #52209e,
+	),
+	"boss-challenge": (
+		bg: #fde4e1,
+		text: #8a1a14,
+	),
+	"worksheet": (
+		bg: #e8f3df,
+		text: #2f4f14,
+	),
+);
+
+.math-blazer__lessons {
+	display: grid;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+// A lesson row has three columns: the type, the title and the chips. In a
+// narrow wrapper the columns stack. The rule uses a container query, so it
+// follows the width of the block and not the width of the screen.
+.math-blazer__lesson {
+	display: grid;
+	grid-template-columns: minmax(9rem, auto) 1fr auto;
+	align-items: center;
+	gap: 0.5rem 0.75rem;
+	padding: 0.625rem 0.75rem;
+	border-inline-start: 4px solid var(--math-blazer-lesson-accent, var(--math-blazer-border));
+	border-radius: calc(var(--math-blazer-radius) * 0.75);
+	background: var(--math-blazer-surface-alt);
+
+	@container (max-width: 40rem) {
+		grid-template-columns: 1fr;
+	}
+}
+
+// All rows of a level share the same three columns, so the titles start at
+// the same position in every row. The first column is as wide as the widest
+// type label of the level, which is "Boss challenge" in the sample course. A
+// subgrid lets each row use the columns of the list. Browsers without subgrid
+// keep the layout above, where each row sizes its own columns.
+@supports (grid-template-columns: subgrid) {
+
+	.math-blazer__lessons {
+		grid-template-columns: max-content minmax(0, 1fr) max-content;
+		column-gap: 0.75rem;
+
+		@container (max-width: 40rem) {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	.math-blazer__lesson {
+		grid-template-columns: subgrid;
+		grid-column: 1 / -1;
+
+		@container (max-width: 40rem) {
+			grid-template-columns: minmax(0, 1fr);
+			grid-column: auto;
+		}
+	}
+}
+
+.math-blazer__lesson-type {
+
+	@include chip;
+
+	inline-size: fit-content;
+	background: var(--math-blazer-type-bg, var(--math-blazer-chip-bg));
+	color: var(--math-blazer-type-text, var(--math-blazer-chip-text));
+}
+
+@each $type, $colors in $lesson-type-colors {
+	.math-blazer__lesson-type--#{$type} {
+		--math-blazer-type-bg: #{map.get($colors, bg)};
+		--math-blazer-type-text: #{map.get($colors, text)};
+	}
+
+	// Every lesson row has a thick accent on the start edge in the dark color of
+	// its type. The row has no type class of its own, so `:has()` reads the type
+	// from the label chip inside the row. This works in the editor too, because
+	// the editor row contains the same chip. The text label of the type carries
+	// the meaning, so the color is never the only way to tell the types apart.
+	.math-blazer__lesson:has(.math-blazer__lesson-type--#{$type}) {
+		--math-blazer-lesson-accent: #{map.get($colors, text)};
+	}
+}
+
+// Boss challenge rows keep the stronger red accent that makes them stand out
+// in the list. The rule comes after the loop above, so it wins.
+.math-blazer__lesson:has(.math-blazer__lesson-type--boss-challenge) {
+	--math-blazer-lesson-accent: var(--math-blazer-boss);
+}
+
+.math-blazer__lesson-title {
+	font-weight: 600;
+	overflow-wrap: anywhere;
+}
+
+.math-blazer__chips {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: 0.375rem;
+
+	@container (max-width: 40rem) {
+		justify-content: flex-start;
+	}
+}
+
+.math-blazer__chip {
+
+	@include chip;
+
+	background: var(--math-blazer-chip-bg);
+	color: var(--math-blazer-chip-text);
+}
+
+.math-blazer__chip--xp {
+	background: var(--math-blazer-xp-bg);
+	color: var(--math-blazer-xp-text);
+}
+
+.math-blazer__chip--preview {
+	background: var(--math-blazer-preview-bg);
+	color: var(--math-blazer-preview-text);
+}
+
+// The free preview link. It is a chip that can be activated, so it has no
+// underline and shows a focus ring on keyboard focus.
+a.math-blazer__chip--preview {
+	text-decoration: none;
+
+	&:focus-visible {
+
+		@include focus-ring;
+	}
+
+	// On touch screens the link grows to the 44 pixel target size.
+	@media (pointer: coarse) {
+		min-block-size: 2.75rem;
+		padding-inline: 1rem;
+	}
+}

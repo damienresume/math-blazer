@@ -1,0 +1,9 @@
+// Styles of the Course Curriculum block that apply only in the block editor.
+
+// The expand all button is a preview in the editor and does nothing, so it is
+// disabled. Browsers dim disabled buttons, which would make the preview look
+// different from the public page, so the dimming is removed.
+.math-blazer .math-blazer__expand-all:disabled {
+	opacity: 1;
+	cursor: default;
+}
