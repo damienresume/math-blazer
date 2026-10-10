@@ -1,0 +1,17 @@
+/*
+Theme Name:   Math Blazer Storefront
+Theme URI:    https://github.com/damienresume/math-blazer
+Description:  A child theme of Twenty Twenty-Five for the development site. It replaces the footer with a clean footer that shows a copyright line with the current year and a row of page links. Everything else comes from the parent theme.
+Author:       Damien Lawson
+Template:     twentytwentyfive
+Version:      0.1.0
+License:      GPL-2.0-or-later
+License URI:  https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain:  math-blazer-storefront
+*/
+
+/*
+This file only holds the theme header above. WordPress reads the header to list the theme
+and to find its parent (the "Template" line). A block theme needs no other styles here,
+because the parent theme provides them, and the footer is built from core blocks.
+*/

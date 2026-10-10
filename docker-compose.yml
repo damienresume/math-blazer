@@ -1,0 +1,156 @@
+# Local development environment for the Math Blazer plugin.
+#
+# Commands:
+#   docker compose up -d                   Start the site.
+#   docker compose --profile dev up -d     Start the site and rebuild on every change.
+#   docker compose down                    Stop the site and keep its data.
+#   docker compose down --volumes          Stop the site and delete its data.
+#
+# How the values in this file work:
+#   A value written as ${NAME} is replaced with the value of NAME from the .env file
+#   in this folder. Create that file first with: cp .env.example .env
+#   This file holds no passwords and no port numbers. Every setting is in .env, and
+#   .env.example lists all of them.
+#
+# How the shared blocks work:
+#   A line that starts with "x-" is not a service. It is a block that is written once
+#   and reused. "&name" gives the block a name, and "*name" or "<<: *name" inserts it
+#   where it is needed.
+
+name: math-blazer
+
+# The database settings that WordPress and WP-CLI both read.
+x-database-env: &database-env
+  WORDPRESS_DB_HOST: db
+  WORDPRESS_DB_NAME: ${DB_NAME}
+  WORDPRESS_DB_USER: ${DB_USER}
+  WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+
+# This project folder, shown to WordPress as a plugin named math-blazer. The
+# ":ro" at the end means read only, because WordPress only reads the plugin files.
+x-plugin-mount: &plugin-mount ./:/var/www/html/wp-content/plugins/math-blazer:ro
+
+# The storefront child theme, shown to WordPress as a theme. It replaces the footer of the
+# default theme. It is mounted read only, because WordPress only reads the theme files.
+x-theme-mount: &theme-mount ./docker/storefront-theme:/var/www/html/wp-content/themes/math-blazer-storefront:ro
+
+# The settings that the two Node services share.
+x-node-service: &node-service
+  build:
+    context: ./docker
+    dockerfile: node.Dockerfile
+  # Run as your own user, so the files that the build writes into this folder belong
+  # to you and not to root.
+  user: "${LOCAL_UID}:${LOCAL_GID}"
+  working_dir: /app
+  environment:
+    # Node tools need a folder they can write to for settings and the download cache.
+    HOME: /tmp
+    npm_config_cache: /tmp/.npm
+  volumes:
+    - ./:/app
+    # The installed packages are kept in a Docker volume, not in this folder. Packages
+    # installed inside the container can differ from the ones on your computer, so the
+    # two must not share one node_modules folder.
+    - node_modules:/app/node_modules
+
+services:
+  # The database that WordPress uses.
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    # The other services wait until this check passes, so WordPress never starts before
+    # the database accepts connections.
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--host=127.0.0.1", "--silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  # WordPress with Apache and PHP 8.3.
+  wordpress:
+    image: wordpress:7.1-php8.3-apache
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      # The 127.0.0.1 at the start means that only this computer can open the site.
+      - "127.0.0.1:${WP_PORT}:80"
+    environment:
+      <<: *database-env
+      WORDPRESS_DEBUG: "1"
+      # Extra lines for wp-config.php. SCRIPT_DEBUG loads the readable WordPress scripts,
+      # which gives better error messages in the browser console. The log file is
+      # wp-content/debug.log inside the WordPress volume.
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'WP_ENVIRONMENT_TYPE', 'local' );
+        define( 'SCRIPT_DEBUG', true );
+        define( 'WP_DEBUG_LOG', true );
+    volumes:
+      - wordpress_data:/var/www/html
+      - *plugin-mount
+      - *theme-mount
+
+  # Installs WordPress, activates the plugin and creates the sample page. It runs once
+  # and then stops. The script is safe to run again.
+  wpcli:
+    image: wordpress:cli-php8.3
+    # The WordPress image runs Apache as user id 33, but the WP-CLI image uses a different
+    # id for the same user name. Using 33 lets WP-CLI write the files that WordPress owns.
+    user: "33:33"
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+      wordpress:
+        condition: service_started
+      # Wait for the build, so the plugin is complete when it is activated.
+      node:
+        condition: service_completed_successfully
+    environment:
+      <<: *database-env
+      HOME: /tmp
+      WP_URL: http://localhost:${WP_PORT}
+      WP_TITLE: ${WP_TITLE}
+      WP_ADMIN_USER: ${WP_ADMIN_USER}
+      WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
+    volumes:
+      - wordpress_data:/var/www/html
+      - *plugin-mount
+      - *theme-mount
+      - ./docker/setup.sh:/setup.sh:ro
+    command: ["sh", "/setup.sh"]
+
+  # Installs the packages and builds the blocks once, then stops.
+  node:
+    <<: *node-service
+    restart: "no"
+    command: ["sh", "-c", "npm ci --no-audit --no-fund && npm run build"]
+
+  # Optional. Rebuilds the blocks each time a source file changes. It only runs when the
+  # "dev" profile is turned on: docker compose --profile dev up -d
+  node-watch:
+    <<: *node-service
+    profiles: ["dev"]
+    restart: unless-stopped
+    # The node service installs the packages. Waiting for it keeps two containers from
+    # writing to the same node_modules volume at the same time.
+    depends_on:
+      node:
+        condition: service_completed_successfully
+    command: ["npm", "run", "start"]
+
+volumes:
+  db_data:
+  wordpress_data:
+  node_modules:
